@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<robot name="my_amr" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find my_amr_sim)/urdf/ros2_control.xacro"/>
+
+  <!-- ======================== Base ======================== -->
+
+  <link name="base_footprint"/>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0.075"/>
+  </joint>
+
+  <link name="base_link">
+    <visual>
+      <geometry><box size="0.5 0.35 0.15"/></geometry>
+      <material name="blue"><color rgba="0.2 0.4 0.8 1"/></material>
+    </visual>
+    <collision>
+      <geometry><box size="0.5 0.35 0.15"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="15.0"/>
+      <inertia ixx="0.095" ixy="0" ixz="0" iyy="0.157" iyz="0" izz="0.229"/>
+    </inertial>
+  </link>
+
+  <!-- ======================== Drive wheels ======================== -->
+
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="0 0.2 -0.025" rpy="-1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="left_wheel">
+    <visual>
+      <geometry><cylinder radius="0.05" length="0.04"/></geometry>
+      <material name="dark"><color rgba="0.1 0.1 0.1 1"/></material>
+    </visual>
+    <collision>
+      <geometry><cylinder radius="0.05" length="0.04"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.000323" ixy="0" ixz="0" iyy="0.000323" iyz="0" izz="0.000625"/>
+    </inertial>
+  </link>
+
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="0 -0.2 -0.025" rpy="1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="right_wheel">
+    <visual>
+      <geometry><cylinder radius="0.05" length="0.04"/></geometry>
+      <material name="dark"><color rgba="0.1 0.1 0.1 1"/></material>
+    </visual>
+    <collision>
+      <geometry><cylinder radius="0.05" length="0.04"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.000323" ixy="0" ixz="0" iyy="0.000323" iyz="0" izz="0.000625"/>
+    </inertial>
+  </link>
+
+  <!-- ======================== Caster wheels ======================== -->
+
+  <joint name="front_caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_caster"/>
+    <origin xyz="0.2 0 -0.05"/>
+  </joint>
+
+  <link name="front_caster">
+    <visual>
+      <geometry><sphere radius="0.025"/></geometry>
+      <material name="dark"><color rgba="0.1 0.1 0.1 1"/></material>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.025"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.000025" ixy="0" ixz="0" iyy="0.000025" iyz="0" izz="0.000025"/>
+    </inertial>
+  </link>
+
+  <joint name="rear_caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rear_caster"/>
+    <origin xyz="-0.2 0 -0.05"/>
+  </joint>
+
+  <link name="rear_caster">
+    <visual>
+      <geometry><sphere radius="0.025"/></geometry>
+      <material name="dark"><color rgba="0.1 0.1 0.1 1"/></material>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.025"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.000025" ixy="0" ixz="0" iyy="0.000025" iyz="0" izz="0.000025"/>
+    </inertial>
+  </link>
+
+  <!-- ======================== 2D Lidar ======================== -->
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0.15 0 0.1"/>
+  </joint>
+
+  <link name="lidar_link">
+    <visual>
+      <geometry><cylinder radius="0.03" length="0.05"/></geometry>
+      <material name="black"><color rgba="0 0 0 1"/></material>
+    </visual>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.000025" ixy="0" ixz="0" iyy="0.000025" iyz="0" izz="0.000025"/>
+    </inertial>
+  </link>
+
+  <gazebo reference="lidar_link">
+    <sensor name="lidar" type="gpu_lidar">
+      <topic>scan</topic>
+      <update_rate>10</update_rate>
+      <gz_frame_id>lidar_link</gz_frame_id>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>360</samples>
+            <min_angle>-3.14159</min_angle>
+            <max_angle>3.14159</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.1</min>
+          <max>12.0</max>
+        </range>
+      </lidar>
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+    </sensor>
+  </gazebo>
+
+  <!-- Caster wheel friction -->
+  <gazebo reference="front_caster">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+  <gazebo reference="rear_caster">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
+  <!-- ======================== ros2_control ======================== -->
+
+  <xacro:ros2_control_gz
+    controllers_config="$(find my_amr_sim)/config/controllers.yaml"/>
+
+</robot>
