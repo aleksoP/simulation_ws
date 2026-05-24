@@ -5,11 +5,21 @@ from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
     OpaqueFunction,
+    SetEnvironmentVariable,
     TimerAction,
 )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+
+# Gazebo converts package:// URIs to model:// and resolves them against
+# GZ_SIM_RESOURCE_PATH. Adding the ROS2 share directories lets Gazebo find
+# meshes installed under <pkg>/share/<pkg>/meshes/.
+_ament_prefix = os.environ.get('AMENT_PREFIX_PATH', '')
+_share_dirs = [os.path.join(p, 'share') for p in _ament_prefix.split(':') if p]
+_gz_resource_path = ':'.join(
+    filter(None, _share_dirs + [os.environ.get('GZ_SIM_RESOURCE_PATH', '')])
+)
 
 
 def launch_setup(context):
@@ -65,7 +75,8 @@ def launch_setup(context):
     diff_drive_controller = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['diff_drive_controller'],
+        arguments=['diff_drive_controller', '--ros-args', '--remap',
+                   '/diff_drive_controller/cmd_vel:=/cmd_vel'],
         output='screen',
     )
 
@@ -79,6 +90,7 @@ def launch_setup(context):
 
 def generate_launch_description():
     return LaunchDescription([
+        SetEnvironmentVariable('GZ_SIM_RESOURCE_PATH', _gz_resource_path),
         DeclareLaunchArgument('robot', default_value='my_amr',
                               description='Robot name — must match a <robot>_sim package'),
         DeclareLaunchArgument('world', default_value='warehouse',
