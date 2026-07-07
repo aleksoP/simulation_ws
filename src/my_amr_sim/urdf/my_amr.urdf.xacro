@@ -18,14 +18,16 @@
 
   <link name="base_link">
     <visual>
+      <origin rpy="0 0 0.0"/>
       <geometry>
-        <mesh filename="package://my_amr_sim/meshes/body.stl" scale="${mesh_scale}"/>
+        <mesh filename="package://my_amr_sim/meshes/body_ccw_90.stl" scale="${mesh_scale}"/>
       </geometry>
       <material name="blue"><color rgba="0.2 0.4 0.8 1"/></material>
     </visual>
     <collision>
+      <origin rpy="0 0 0.0"/>
       <geometry>
-        <mesh filename="package://my_amr_sim/meshes/body.stl" scale="${mesh_scale}"/>
+        <mesh filename="package://my_amr_sim/meshes/body_ccw_90.stl" scale="${mesh_scale}"/>
       </geometry>
     </collision>
     <inertial>
@@ -39,20 +41,22 @@
   <joint name="left_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="left_wheel"/>
-    <origin xyz="0.230 0.0 0.0" rpy="-1.5708 0 0"/>
-    <axis xyz="1 0 0"/>
+    <origin xyz="0.0 0.230 0.0" rpy="1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
 
   <link name="left_wheel">
     <visual>
+      <origin rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://my_amr_sim/meshes/wheel.stl" scale="${mesh_scale}"/>
+        <mesh filename="package://my_amr_sim/meshes/wheel_y_ccw_90.stl" scale="${mesh_scale}"/>
       </geometry>
       <material name="dark"><color rgba="0.1 0.1 0.1 1"/></material>
     </visual>
     <collision>
+      <origin rpy="0 0 0"/>
       <geometry>
-          <mesh filename="package://my_amr_sim/meshes/wheel.stl" scale="${mesh_scale}"/>
+          <mesh filename="package://my_amr_sim/meshes/wheel_y_ccw_90.stl" scale="${mesh_scale}"/>
         </geometry>
     </collision>
     <inertial>
@@ -64,22 +68,22 @@
   <joint name="right_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="right_wheel"/>
-    <origin xyz="-0.230 0.0 0.0" rpy="1.5708 0 0"/>
-    <axis xyz="1 0 0"/>
+    <origin xyz="0.0 -0.230 0.0" rpy="-1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
 
   <link name="right_wheel">
     <visual>
       <!-- rpy="0 3.14159 0" flips the mesh if the right side appears mirrored -->
-      <origin rpy="0 3.14159 0"/>
+      <origin rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://my_amr_sim/meshes/wheel.stl" scale="${mesh_scale}"/>
+        <mesh filename="package://my_amr_sim/meshes/wheel_y_ccw_90.stl" scale="${mesh_scale}"/>
       </geometry>
       <material name="dark"><color rgba="0.1 0.1 0.1 1"/></material>
     </visual>
     <collision>
       <geometry>
-          <mesh filename="package://my_amr_sim/meshes/wheel.stl" scale="${mesh_scale}"/>
+          <mesh filename="package://my_amr_sim/meshes/wheel_y_ccw_90.stl" scale="${mesh_scale}"/>
         </geometry>
     </collision>
     <inertial>
@@ -93,7 +97,7 @@
   <joint name="front_left_caster_joint" type="fixed">
     <parent link="base_link"/>
     <child link="front_left_caster"/>
-    <origin xyz="0.210 0.335 -0.031"/>
+    <origin xyz=" 0.335 0.210 -0.031"/>
   </joint>
 
   <link name="front_left_caster">
@@ -113,7 +117,7 @@
   <joint name="rear_left_caster_joint" type="fixed">
     <parent link="base_link"/>
     <child link="rear_left_caster"/>
-    <origin xyz="-0.210 0.335 -0.031"/>
+    <origin xyz="0.335 -0.210 -0.031"/>
   </joint>
 
   <link name="rear_left_caster">
@@ -133,7 +137,7 @@
   <joint name="front_right_caster_joint" type="fixed">
     <parent link="base_link"/>
     <child link="front_right_caster"/>
-    <origin xyz="0.210 -0.335 -0.031"/>
+    <origin xyz="-0.335 0.210 -0.031"/>
   </joint>
 
   <link name="front_right_caster">
@@ -153,7 +157,7 @@
   <joint name="rear_right_caster_joint" type="fixed">
     <parent link="base_link"/>
     <child link="rear_right_caster"/>
-    <origin xyz="-0.210 -0.335 -0.031"/>
+    <origin xyz="-0.335 -0.210 -0.031"/>
   </joint>
 
   <link name="rear_right_caster">
@@ -175,8 +179,8 @@
   <joint name="lidar_joint" type="fixed">
     <parent link="base_link"/>
     <child link="lidar_link"/>
-    <!-- lidar_link = scan plane: mount height (0.08) + sensor height (0.039) -->
-    <origin xyz="0.0 -0.400 0.110"/>
+    <!-- lidar body mount: mount height (0.08) + sensor height (0.039) -->
+    <origin xyz="0.400 0 0.110"/>
   </joint>
 
   <link name="lidar_link">
@@ -184,7 +188,7 @@
       <!-- mesh Z starts at 0 (sensor base); shift down so it renders below the scan frame -->
       <origin xyz="0 0 -0.030"/>
       <geometry>
-        <mesh filename="package://my_amr_sim/meshes/rplidar_s2.stl" scale="${mesh_scale}"/>
+        <mesh filename="package://my_amr_sim/meshes/rplidar_s2_frame_aligned.stl" scale="${mesh_scale}"/>
       </geometry>
       <material name="dark"><color rgba="0.1 0.1 0.1 1"/></material>
     </visual>
@@ -229,7 +233,7 @@
   <link name="imu_link">
     <visual>
       <geometry>
-        <mesh filename="package://my_amr_sim/meshes/ellipse_micro_ahrs.stl" scale="${mesh_scale}"/>
+        <mesh filename="package://my_amr_sim/meshes/ellipse_micro_ahrs_ccw_90.stl" scale="${mesh_scale}"/>
       </geometry>
       <material name="dark"><color rgba="0.1 0.1 0.1 1"/></material>
     </visual>

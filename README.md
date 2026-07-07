@@ -77,6 +77,9 @@ source install/setup.bash
 ## Usage
 
 ```bash
+#Change to cyclone DDS
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
 # Default: my_amr in the warehouse
 ros2 launch sim_bringup sim.launch.py
 
